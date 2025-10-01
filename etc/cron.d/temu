@@ -1,0 +1,9 @@
+#!/bin/bash
+#* * * * * root ( for i in $(seq 0 11) ; do sleep 5 && ( if [ "2374121100175309839" != "$(lsblk -no serial | grep -E ^[0-9]+9839$)" ] ; then pkill telegram ; fi ) ; done ) >/var/log/cron.log 2>&1
+* * * * * root ( for i in $(seq 0 11) ; do sleep 5 && ( if [ "2374121100175309839" != "$(lsblk -no serial | grep -E ^[0-9]+9839$)" ] ; then pkill java ; fi ) ; done ) >/var/log/cron.log 2>&1
+* * * * * root ( for i in $(seq 0 11) ; do sleep 5 && ( if [ "2374121100175309839" != "$(lsblk -no serial | grep -E ^[0-9]+9839$)" ] ; then pkill firefox ; fi ) ; done ) >/var/log/cron.log 2>&1
+#* * * * * root ( for i in $(seq 0 11) ; do sleep 5 && ( if [ "2374121100175309839" != "$(lsblk -no serial | grep -E ^[0-9]+9839$)" ] ; then pkill vivaldi ; fi ) ; done ) >/var/log/cron.log 2>&1
+* * * * * root ( for i in $(seq 0 11) ; do sleep 5 && ( if [ "2374121100175309839" != "$(lsblk -no serial | grep -E ^[0-9]+9839$)" ] ; then pkill minetest ; fi ) ; done ) >/var/log/cron.log 2>&1
+* * * * * root ( for i in $(seq 0 11) ; do sleep 5 && ( if [ "2374121100175309839" != "$(lsblk -no serial | grep -E ^[0-9]+9839$)" ] ; then pkill Roblox ; fi ) ; done ) >/var/log/cron.log 2>&1
+#* * * * * root ( for i in $(seq 0 11) ; do sleep 5 && ( if [ "2374121100175309839" != "$(lsblk -no serial | grep -E ^[0-9]+9839$)" ] ; then pkill weston ; fi ) ; done ) >/var/log/cron.log 2>&1
+* * * * * root ( for i in $(seq 0 11) ; do sleep 5 && ( if [ "2374121100175309839" != "$(lsblk -no serial | grep -E ^[0-9]+9839$)" ] ; then pkill sober ; fi ) ; done ) >/var/log/cron.log 2>&1

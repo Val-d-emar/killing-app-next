@@ -1,0 +1,13 @@
+#!/bin/bash
+SHELL=/bin/bash
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+* * * * * root ( for i in $(seq 0 11) ; do sleep 5 && ( if [ -f "/tmp/killing/Telegram" ] ; then pkill Telegram ; fi ) ; done ) >/var/log/cron.log 2>&1
+* * * * * root ( for i in $(seq 0 11) ; do sleep 5 && ( if [ -f "/tmp/killing/Telegram" ] ; then pkill telegram ; fi ) ; done ) >/var/log/cron.log 2>&1
+* * * * * root ( for i in $(seq 0 11) ; do sleep 5 && ( if [ -f "/tmp/killing/Minecraft" ] ; then pkill java ; fi ) ; done ) >/var/log/cron.log 2>&1
+* * * * * root ( for i in $(seq 0 11) ; do sleep 5 && ( if [ -f "/tmp/killing/Firefox" ] ; then pkill firefox ; fi ) ; done ) >/var/log/cron.log 2>&1
+* * * * * root ( for i in $(seq 0 11) ; do sleep 5 && ( if [ -f "/tmp/killing/Vivaldi" ] ; then pkill vivaldi ; fi ) ; done ) >/var/log/cron.log 2>&1
+* * * * * root ( for i in $(seq 0 11) ; do sleep 5 && ( if [ -f "/tmp/killing/Minetest" ] ; then pkill minetest ; fi ) ; done ) >/var/log/cron.log 2>&1
+* * * * * root ( for i in $(seq 0 11) ; do sleep 5 && ( if [ -f "/tmp/killing/Roblox" ] ; then pkill Roblox ; fi ) ; done ) >/var/log/cron.log 2>&1
+* * * * * root ( for i in $(seq 0 11) ; do sleep 5 && ( if [ -f "/tmp/killing/Weston" ] ; then pkill weston ; fi ) ; done ) >/var/log/cron.log 2>&1
+* * * * * root ( for i in $(seq 0 11) ; do sleep 5 && ( if [ -f "/tmp/killing/Roblox" ] ; then pkill sober ; fi ) ; done ) >/var/log/cron.log 2>&1
+* * * * * root ( for i in $(seq 0 11) ; do sleep 5 && ( if [ -f "/tmp/killing/PowerOff" ] ; then poweroff ; fi ) ; done ) >/var/log/cron.log 2>&1

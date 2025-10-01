@@ -1,95 +1,79 @@
-import Image from "next/image";
+"use client";
+
+import React, { useState, useEffect, useMemo } from "react";
 import styles from "./page.module.css";
 
-export default function Home() {
-  return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>src/app/page.tsx</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+interface AppState {
+  name: string;
+  checked: boolean;
+}
 
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+export default function HomePage() {
+  const [apps, setApps] = useState<AppState[]>([]);
+
+  const appListFromEnv = useMemo(() => {
+    return (process.env.NEXT_PUBLIC_APP_LIST || "").split(",").filter(Boolean);
+  }, []);
+
+  useEffect(() => {
+    fetch("/api/apps")
+      .then((res) => res.json())
+      .then((data) => {
+        const activeApps = new Set(data.activeApps || []);
+        const initialAppsState = appListFromEnv.map((app) => ({
+          name: app,
+          checked: activeApps.has(app),
+        }));
+        setApps(initialAppsState);
+      });
+  }, [appListFromEnv]);
+
+  const handleCheckboxChange = async (appName: string, isChecked: boolean) => {
+    setApps((currentApps) =>
+      currentApps.map((app) =>
+        app.name === appName ? { ...app, checked: isChecked } : app
+      )
+    );
+
+    try {
+      await fetch("/api/apps", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          appName,
+          action: isChecked ? "create" : "delete",
+        }),
+      });
+    } catch (error) {
+      console.error("Ошибка сети", error);
+    }
+  };
+
+  return (
+    <main className={styles.main}>
+      <div className={styles.card}>
+        <h1 className={styles.title}>App killer:</h1>
+
+        <ul className={styles.appList}>
+          {apps.map((app) => (
+            <li key={app.name} className={styles.appItem}>
+              <input
+                type="checkbox"
+                id={app.name}
+                name={app.name}
+                checked={app.checked}
+                onChange={(e) =>
+                  handleCheckboxChange(app.name, e.target.checked)
+                }
+                className={styles.checkbox}
+              />
+              <label htmlFor={app.name} className={styles.label}>
+                {app.name}
+              </label>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </main>
   );
 }

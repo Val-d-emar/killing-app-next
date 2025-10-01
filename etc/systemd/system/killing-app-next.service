@@ -1,0 +1,17 @@
+[Unit]
+Description=Next.js Killing App
+After=network.target
+
+[Service]
+User=mom
+Group=mom
+WorkingDirectory=/home/mom/killing-app-next
+
+Environment=NODE_ENV=production
+
+ExecStart=/home/mom/.nvm/versions/node/v22.20.0/bin/node /home/mom/killing-app-next/node_modules/.bin/next start
+
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
