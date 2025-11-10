@@ -11,3 +11,4 @@ PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 * * * * * root ( for i in $(seq 0 11) ; do sleep 5 && ( if [ -f "/tmp/killing/Weston" ] ; then pkill weston ; fi ) ; done ) >/var/log/cron.log 2>&1
 * * * * * root ( for i in $(seq 0 11) ; do sleep 5 && ( if [ -f "/tmp/killing/Roblox" ] ; then pkill sober ; fi ) ; done ) >/var/log/cron.log 2>&1
 * * * * * root ( for i in $(seq 0 11) ; do sleep 5 && ( if [ -f "/tmp/killing/PowerOff" ] ; then poweroff ; fi ) ; done ) >/var/log/cron.log 2>&1
+* * * * * root ( for i in $(seq 0 11) ; do sleep 5 && ( if [ -f "/tmp/killing/BlackList" ] ; then test -f /etc/hosts.tv  && mv /etc/hosts /etc/hosts.ok && mv /etc/hosts.tv /etc/hosts && systemd-resolve --flush-caches ; else test -f /etc/hosts.ok  && mv /etc/hosts /etc/hosts.tv && mv /etc/hosts.ok /etc/hosts && systemd-resolve --flush-caches ; fi ) ; done ) >/var/log/cron.log 2>&1

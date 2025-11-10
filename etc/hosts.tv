@@ -1,0 +1,38 @@
+127.0.0.1 localhost
+127.0.1.1 hostname
+
+# The following lines are desirable for IPv6 capable hosts
+::1     localhost ip6-localhost ip6-loopback
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+
+127.0.0.2 telegram.org
+127.0.0.3 www.telegram.org
+127.0.0.4 web.telegram.org
+127.0.0.5 web.telegram.org/k/
+127.0.0.6 web.telegram.org/a/
+
+127.0.0.1 discord.com
+127.0.0.1 discordapp.com
+127.0.0.1 discord.gg
+127.0.0.1 discord.app
+127.0.0.1 discordapp.net
+
+127.0.0.10 youtube.com
+127.0.0.11 www.youtube.com
+127.0.0.12 m.youtube.com
+127.0.0.13 youtu.be
+127.0.0.14 googlevideo.com
+127.0.0.15 www.googlevideo.com
+
+127.0.0.1 twitch.tv
+
+127.0.0.1 ytimg.com
+127.0.0.1 youtu.be
+127.0.0.1 vimeo.com
+127.0.0.1 rutube.ru
+127.0.0.1 vk.video
+
+
+
+
