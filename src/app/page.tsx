@@ -52,7 +52,7 @@ export default function HomePage() {
   return (
     <main className={styles.main}>
       <div className={styles.card}>
-        <h1 className={styles.title}>App killer:</h1>
+        <h1 className={styles.title}>Block List:</h1>
 
         <ul className={styles.appList}>
           {apps.map((app) => (
