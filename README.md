@@ -44,17 +44,17 @@ This can be confusing and frustrating. It is important to explain to the child t
 This system is very powerful and must be used with an understanding of some key points.
 
 1. **Killing by process name (`pkill`):** The system closes programs by finding them by their process name. This can have side effects!
-
    - **Example with Minecraft:** You've added `Minecraft` to the list. The system will execute the command `pkill java`. This means that **ANY program written in Java** running on the server will be immediately closed. If another important Java program is running on the server, it will be closed too. **Be careful!**
-2. **The "PowerOff" button is an "Atomic Bomb"**:
 
+2. **The "PowerOff" button is an "Atomic Bomb"**:
    - The list includes a `PowerOff` option. This is not just a prohibition; it's a command for an **immediate emergency shutdown of the entire server**.
    - Use this option only in extreme cases when you need to shut everything down urgently. It is equivalent to pulling the power cord from the outlet — all unsaved data will be lost.
-3. **Built-in vulnerabilities - never use this on a server open to the internet**:
 
+3. **Built-in vulnerabilities - never use this on a server open to the internet**:
    - Nothing prevents the child from learning to manage the system themselves - keep the address secret, and if necessary, simply change the connection port.
    - The presence of vulnerabilities gives the child a chance to surpass you in matters of internet security.
    - The ability to bypass the system is a way to avoid learned helplessness; encourage the child to develop, learn, and win!
+
 4. **Double check for Telegram:** The script has two lines for Telegram (`pkill Telegram` and `pkill telegram`), as the process name can be in different cases depending on the installation source.
 5. **Lack of flexibility:** The system does not allow for "permit for an hour". It operates in an "on/off" mode.
 
@@ -99,11 +99,13 @@ This component is your "control panel".
    git clone https:git@github.com:Val-d-emar/killing-app-next.git
    cd killing-app-next
    ```
+
 2. **Install project dependencies:**
 
    ```bash
    npm install
    ```
+
 3. **Configure environment variables:**
    Create a `.env.local` file for configuration.
 
@@ -120,6 +122,7 @@ This component is your "control panel".
    ```
 
    Save and close the file (`Ctrl+X`, `Y`, `Enter`).
+
 4. **Build the project for production:**
    You need to create an optimized version of the application to run on the server.
 
@@ -138,6 +141,7 @@ This service will ensure your "control panel" is always running and starts autom
    ```bash
    sudo nano /etc/systemd/system/killing-app-next.service
    ```
+
 2. **Paste the following configuration into the file:**
    **Attention:** Replace `mom` with your username and `/home/mom/killing-app-next` with the full path to your project.
 
@@ -161,6 +165,7 @@ This service will ensure your "control panel" is always running and starts autom
    [Install]
    WantedBy=multi-user.target
    ```
+
 3. **Start and enable the service:**
 
    ```bash
@@ -168,6 +173,7 @@ This service will ensure your "control panel" is always running and starts autom
    sudo systemctl start killing-app-next.service
    sudo systemctl enable killing-app-next.service
    ```
+
 4. **Check the status and open the port:**
 
    ```bash
@@ -191,6 +197,7 @@ This is the main component — the "killer" of unwanted processes.
    ```bash
    sudo crontab -e
    ```
+
 2. **Paste the block of tasks at the end of the file:**
    This block runs a loop every minute that checks for flag files 12 times (every 5 seconds) and terminates the corresponding processes.
 
@@ -211,6 +218,7 @@ This is the main component — the "killer" of unwanted processes.
    * * * * * ( for i in $(seq 0 11) ; do sleep 5 && ( if [ -f "/tmp/killing/PowerOff" ] ; then poweroff ; fi ) ; done ) >>/var/log/cron.log 2>&1
    # --- End Killing App Cron Block ---
    ```
+
 3. **Save and close the file.** `cron` will automatically apply the changes.
 
 ---
@@ -224,6 +232,7 @@ This script ensures that default flag files are created when the server reboots 
    ```bash
    sudo -u mom crontab -e
    ```
+
 2. **Add the `@reboot` line:**
    This command first ensures the `/tmp/killing` directory is created (since `/tmp` is cleared on reboot), and then creates flag files in it for applications that should be blocked by default.
 
@@ -233,6 +242,7 @@ This script ensures that default flag files are created when the server reboots 
    ```
 
    In this example, `Minecraft` and `Roblox` will be blocked immediately after the server starts. You can add or remove any applications from this list.
+
 3. **Save and close the file.**
 
 ### **Step 5: Final Check**
@@ -288,17 +298,17 @@ This script ensures that default flag files are created when the server reboots 
 Эта система очень мощная, и её нужно использовать с пониманием некоторых ключевых моментов.
 
 1. **"Убийство" по имени процесса (`pkill`):** Система закрывает программы, находя их по имени процесса. Это может иметь побочные эффекты!
-
    - **Пример с Minecraft:** Вы добавили в список `Minecraft`. Система будет выполнять команду `pkill java`. Это означает, что **ЛЮБАЯ программа, написанная на Java**, которая будет запущена на сервере, будет немедленно закрыта. Если на сервере работает какая-то другая важная программа на Java, она тоже будет закрыта. **Будьте осторожны!**
-2. **Кнопка «PowerOff» — это "Атомная бомба"**:
 
+2. **Кнопка «PowerOff» — это "Атомная бомба"**:
    - В списке есть опция `PowerOff`. Это не просто запрет, это команда на **немедленное аварийное выключение всего сервера**.
    - Используйте эту опцию только в крайних случаях, когда нужно срочно всё выключить. Это эквивалентно выдергиванию шнура из розетки — все несохраненные данные будут потеряны.
-3. **Заложенные уязвимости - никогда не используйте это на открытом сервере в сети интернет**:
 
+3. **Заложенные уязвимости - никогда не используйте это на открытом сервере в сети интернет**:
    - Никто не мешает ребёнку самому научиться управлять системой - берегите адрес в секрете, если что - просто смените порт подключения.
    - Наличие уязвимостей даёт ребенку шанс превзойти Вас в вопросах интернет-безопасности.
    - Возможность обойти систему - способ избежать выученной беспомощности, поощряйте ребёнка развиваться, учиться и побеждать!
+
 4. **Двойная проверка Telegram:** В скрипте есть две строки для Telegram (`pkill Telegram` и `pkill telegram`), так как имя процесса может быть в разном регистре в зависимости от источника установки.
 5. **Отсутствие гибкости:** Система не позволяет "разрешить на час". Она работает в режиме "вкл/выкл".
 
@@ -343,11 +353,13 @@ This script ensures that default flag files are created when the server reboots 
    git clone https:git@github.com:Val-d-emar/killing-app-next.git
    cd killing-app-next
    ```
+
 2. **Установите зависимости проекта:**
 
    ```bash
    npm install
    ```
+
 3. **Настройте переменные окружения:**
    Создайте файл `.env.local` для конфигурации.
 
@@ -364,6 +376,7 @@ This script ensures that default flag files are created when the server reboots 
    ```
 
    Сохраните и закройте файл (`Ctrl+X`, `Y`, `Enter`).
+
 4. **Соберите проект для продакшена:**
    Необходимо создать оптимизированную версию приложения для запуска на сервере.
 
@@ -382,6 +395,7 @@ This script ensures that default flag files are created when the server reboots 
    ```bash
    sudo nano /etc/systemd/system/killing-app-next.service
    ```
+
 2. **Вставьте в файл следующую конфигурацию:**
    **Внимание:** Замените `mom` на имя вашего пользователя и `/home/mom/killing-app-next` на полный путь к вашему проекту.
 
@@ -405,6 +419,7 @@ This script ensures that default flag files are created when the server reboots 
    [Install]
    WantedBy=multi-user.target
    ```
+
 3. **Запустите и включите службу:**
 
    ```bash
@@ -412,6 +427,7 @@ This script ensures that default flag files are created when the server reboots 
    sudo systemctl start killing-app-next.service
    sudo systemctl enable killing-app-next.service
    ```
+
 4. **Проверьте статус и откройте порт:**
 
    ```bash
@@ -435,6 +451,7 @@ This script ensures that default flag files are created when the server reboots 
    ```bash
    sudo crontab -e
    ```
+
 2. **Вставьте в конец файла блок с задачами:**
    Этот блок запускает каждую минуту цикл, который 12 раз (каждые 5 секунд) проверяет наличие файлов-флагов и завершает соответствующие процессы.
 
@@ -455,6 +472,7 @@ This script ensures that default flag files are created when the server reboots 
    * * * * * ( for i in $(seq 0 11) ; do sleep 5 && ( if [ -f "/tmp/killing/PowerOff" ] ; then poweroff ; fi ) ; done ) >>/var/log/cron.log 2>&1
    # --- End Killing App Cron Block ---
    ```
+
 3. **Сохраните и закройте файл.** `cron` автоматически применит изменения.
 
 ---
@@ -468,6 +486,7 @@ This script ensures that default flag files are created when the server reboots 
    ```bash
    sudo -u mom crontab -e
    ```
+
 2. **Добавьте строку `@reboot`:**
    Эта команда сначала гарантированно создает директорию `/tmp/killing` (так как `/tmp` очищается при перезагрузке), а затем создает в ней файлы-флаги для приложений, которые должны быть заблокированы по умолчанию.
 
@@ -477,6 +496,7 @@ This script ensures that default flag files are created when the server reboots 
    ```
 
    В этом примере `Minecraft` и `Roblox` будут заблокированы сразу после старта сервера. Вы можете добавить или убрать любые приложения из этого списка.
+
 3. **Сохраните и закройте файл.**
 
 ### **Шаг 5: Финальная проверка**

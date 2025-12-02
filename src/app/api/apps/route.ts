@@ -20,7 +20,7 @@ export async function GET() {
     console.error("Ошибка при чтении директории:", error);
     return NextResponse.json(
       { message: "Не удалось получить состояние" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
     if (!appName) {
       return NextResponse.json(
         { message: "Имя приложения не указано" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -56,14 +56,14 @@ export async function POST(request: NextRequest) {
     } else {
       return NextResponse.json(
         { message: "Неверное действие" },
-        { status: 400 }
+        { status: 400 },
       );
     }
   } catch (error) {
     console.error("Ошибка при обработке файла:", error);
     return NextResponse.json(
       { message: "Внутренняя ошибка сервера" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

@@ -11,19 +11,45 @@ interface AppState {
 export default function HomePage() {
   const [apps, setApps] = useState<AppState[]>([]);
   const [isReadOnly, setIsReadOnly] = useState(false);
+  const [serverIPs, setServerIPs] = useState<string[]>([]);
 
   const appListFromEnv = useMemo(() => {
     return (process.env.NEXT_PUBLIC_APP_LIST || "").split(",").filter(Boolean);
   }, []);
 
-    useEffect(() => {
-    if (typeof window !== 'undefined') {
+  useEffect(() => {
+    fetch("/api/server-info")
+      .then((res) => res.json())
+      .then((data) => {
+        setServerIPs(data.localIPs || []);
+      })
+      .catch(() => {
+        setServerIPs([]);
+      });
+  }, []);
+
+  useEffect(() => {
+    if (
+      serverIPs.length === 0 &&
+      window.location.hostname !== "localhost" &&
+      window.location.hostname !== "127.0.0.1"
+    ) {
+      return;
+    }
+
+    if (typeof window !== "undefined") {
       const hostname = window.location.hostname;
-      if (hostname === 'localhost' || hostname === '127.0.0.1') {
+      if (
+        hostname === "localhost" ||
+        hostname === "127.0.0.1" ||
+        serverIPs.includes(hostname)
+      ) {
         setIsReadOnly(true);
+      } else {
+        setIsReadOnly(false);
       }
     }
-  }, []);
+  }, [serverIPs]);
 
   useEffect(() => {
     fetch("/api/apps")
@@ -45,8 +71,8 @@ export default function HomePage() {
 
     setApps((currentApps) =>
       currentApps.map((app) =>
-        app.name === appName ? { ...app, checked: isChecked } : app
-      )
+        app.name === appName ? { ...app, checked: isChecked } : app,
+      ),
     );
 
     try {
@@ -82,7 +108,10 @@ export default function HomePage() {
                 className={styles.checkbox}
                 disabled={isReadOnly}
               />
-              <label htmlFor={app.name} className={`${styles.label} ${isReadOnly ? styles.labelDisabled : ''}`}>
+              <label
+                htmlFor={app.name}
+                className={`${styles.label} ${isReadOnly ? styles.labelDisabled : ""}`}
+              >
                 {app.name}
               </label>
             </li>
