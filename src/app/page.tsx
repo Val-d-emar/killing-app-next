@@ -10,9 +10,19 @@ interface AppState {
 
 export default function HomePage() {
   const [apps, setApps] = useState<AppState[]>([]);
+  const [isReadOnly, setIsReadOnly] = useState(false);
 
   const appListFromEnv = useMemo(() => {
     return (process.env.NEXT_PUBLIC_APP_LIST || "").split(",").filter(Boolean);
+  }, []);
+
+    useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const hostname = window.location.hostname;
+      if (hostname === 'localhost' || hostname === '127.0.0.1') {
+        setIsReadOnly(true);
+      }
+    }
   }, []);
 
   useEffect(() => {
@@ -29,6 +39,10 @@ export default function HomePage() {
   }, [appListFromEnv]);
 
   const handleCheckboxChange = async (appName: string, isChecked: boolean) => {
+    if (isReadOnly) {
+      return;
+    }
+
     setApps((currentApps) =>
       currentApps.map((app) =>
         app.name === appName ? { ...app, checked: isChecked } : app
@@ -66,8 +80,9 @@ export default function HomePage() {
                   handleCheckboxChange(app.name, e.target.checked)
                 }
                 className={styles.checkbox}
+                disabled={isReadOnly}
               />
-              <label htmlFor={app.name} className={styles.label}>
+              <label htmlFor={app.name} className={`${styles.label} ${isReadOnly ? styles.labelDisabled : ''}`}>
                 {app.name}
               </label>
             </li>
