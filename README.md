@@ -243,9 +243,10 @@ This script ensures that default flag files are created when the server reboots 
 
 ### **Step 5: Configure user `mom` to perform passwordless shutdown**
 
-   ```bash
-   sudo echo "mom ALL=(ALL) NOPASSWD: /sbin/shutdown" > /etc/sudoers.d/mom-shutdown
-   ```
+```bash
+sudo echo "mom ALL=(ALL) NOPASSWD: /sbin/shutdown" > /etc/sudoers.d/mom-shutdown
+```
+
 ### **Step 6: Final Check**
 
 1. **Reboot the server:** `sudo reboot`.
@@ -500,9 +501,9 @@ This script ensures that default flag files are created when the server reboots 
 
 ### **Шаг 5: Настройка пользователю mom права выполнять shutdown без пароля**
 
-   ```bash
-   sudo echo "mom ALL=(ALL) NOPASSWD: /sbin/shutdown" > /etc/sudoers.d/mom-shutdown
-   ```
+```bash
+sudo echo "mom ALL=(ALL) NOPASSWD: /sbin/shutdown" > /etc/sudoers.d/mom-shutdown
+```
 
 ### **Шаг 6: Финальная проверка**
 

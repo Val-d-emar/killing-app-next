@@ -17,6 +17,15 @@ function runCommand(command: string): Promise<string> {
   });
 }
 
+function isErrorWithCode(error: unknown): error is { code: string } {
+  return (
+    typeof error === "object" &&
+    error !== null &&
+    "code" in error &&
+    typeof (error as { code: unknown }).code === "string"
+  );
+}
+
 // GET: Проверяет, есть ли запланированное выключение
 export async function GET() {
   try {
@@ -26,9 +35,14 @@ export async function GET() {
     const shutdownTime = new Date(parseInt(usec) / 1000); // ms
     return NextResponse.json({ isScheduled: true, time: shutdownTime });
   } catch (error) {
-    console.debug(error);
-    // Если файла нет, значит, ничего не запланировано
-    return NextResponse.json({ isScheduled: false, time: null });
+    if (isErrorWithCode(error) && error.code === "ENOENT") {
+      return NextResponse.json({ isScheduled: false, time: null });
+    }
+    console.error("Unexpected error reading shutdown schedule:", error);
+    return NextResponse.json(
+      { success: false, message: "Failed to read shutdown schedule status" },
+      { status: 500 },
+    );
   }
 }
 

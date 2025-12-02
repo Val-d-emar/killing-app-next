@@ -16,7 +16,8 @@ interface DeadlineState {
 export default function HomePage() {
   const [apps, setApps] = useState<AppState[]>([]);
   const [isReadOnly, setIsReadOnly] = useState(false);
-  const [serverIPs, setServerIPs] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
   const [deadline, setDeadline] = useState<DeadlineState>({
     isScheduled: false,
     time: "22:00",
@@ -27,40 +28,28 @@ export default function HomePage() {
   }, []);
 
   useEffect(() => {
-    fetch("/api/server-info")
-      .then((res) => res.json())
-      .then((data) => {
-        setServerIPs(data.localIPs || []);
-      })
-      .catch(() => {
-        setServerIPs([]);
-      });
+    const checkAccess = async () => {
+      try {
+        const response = await fetch("/api/check-access");
+        const data = await response.json();
+
+        setIsReadOnly(data.isLocalAccess);
+      } catch (error) {
+        console.error(
+          "Access check failed, granting write access by default:",
+          error,
+        );
+        setIsReadOnly(false);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    checkAccess();
   }, []);
 
   useEffect(() => {
-    if (
-      serverIPs.length === 0 &&
-      window.location.hostname !== "localhost" &&
-      window.location.hostname !== "127.0.0.1"
-    ) {
-      return;
-    }
-
-    if (typeof window !== "undefined") {
-      const hostname = window.location.hostname;
-      if (
-        hostname === "localhost" ||
-        hostname === "127.0.0.1" ||
-        serverIPs.includes(hostname)
-      ) {
-        setIsReadOnly(true);
-      } else {
-        setIsReadOnly(false);
-      }
-    }
-  }, [serverIPs]);
-
-  useEffect(() => {
+    if (isLoading) return;
     fetch("/api/apps")
       .then((res) => res.json())
       .then((data) => {
@@ -81,7 +70,7 @@ export default function HomePage() {
           setDeadline({ isScheduled: true, time: `${hours}:${minutes}` });
         }
       });
-  }, [appListFromEnv]);
+  }, [appListFromEnv, isLoading]);
 
   const handleCheckboxChange = async (appName: string, isChecked: boolean) => {
     if (isReadOnly) {
@@ -124,6 +113,9 @@ export default function HomePage() {
   return (
     <main className={styles.main}>
       <div className={styles.card}>
+        {isLoading && (
+          <div className={styles.readOnlyNotice}>Access is checking...</div>
+        )}
         <h1 className={styles.title}>Block List:</h1>
 
         <ul className={styles.appList}>
