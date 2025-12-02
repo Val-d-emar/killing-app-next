@@ -186,8 +186,6 @@ This service will ensure your "control panel" is always running and starts autom
 
    Your web interface should now be accessible at `http://<server_IP>:3000`.
 
----
-
 ### **Step 3: Configuring the "Cron Guardian" (root cron)**
 
 This is the main component — the "killer" of unwanted processes.
@@ -221,8 +219,6 @@ This is the main component — the "killer" of unwanted processes.
 
 3. **Save and close the file.** `cron` will automatically apply the changes.
 
----
-
 ### **Step 4: Configuring the Initial State (mom cron)**
 
 This script ensures that default flag files are created when the server reboots (e.g., so that some applications are blocked immediately).
@@ -245,7 +241,12 @@ This script ensures that default flag files are created when the server reboots 
 
 3. **Save and close the file.**
 
-### **Step 5: Final Check**
+### **Step 5: Configure user `mom` to perform passwordless shutdown**
+
+   ```bash
+   sudo echo "mom ALL=(ALL) NOPASSWD: /sbin/shutdown" > /etc/sudoers.d/mom-shutdown
+   ```
+### **Step 6: Final Check**
 
 1. **Reboot the server:** `sudo reboot`.
 2. **After booting, check:**
@@ -255,6 +256,8 @@ This script ensures that default flag files are created when the server reboots 
    - **Logs:** Check `/var/log/cron.log` (or `sudo grep CRON /var/log/syslog`) to ensure the tasks are running.
 
 **Setup is complete.** You now have a fully functional active application control system.
+
+---
 
 # Система Активного Родительского Контроля «Стоп-Кран» для Linux
 
@@ -440,8 +443,6 @@ This script ensures that default flag files are created when the server reboots 
 
    Теперь ваш веб-интерфейс должен быть доступен по адресу `http://<IP_сервера>:3000`.
 
----
-
 ### **Шаг 3: Настройка "Крон-Стража" (root cron)**
 
 Это самый главный компонент — "убийца" нежелательных процессов.
@@ -475,8 +476,6 @@ This script ensures that default flag files are created when the server reboots 
 
 3. **Сохраните и закройте файл.** `cron` автоматически применит изменения.
 
----
-
 ### **Шаг 4: Настройка начального состояния (mom cron)**
 
 Этот скрипт гарантирует, что при перезагрузке сервера будут созданы файлы-флаги по умолчанию (например, чтобы какие-то приложения были сразу заблокированы).
@@ -499,7 +498,13 @@ This script ensures that default flag files are created when the server reboots 
 
 3. **Сохраните и закройте файл.**
 
-### **Шаг 5: Финальная проверка**
+### **Шаг 5: Настройка пользователю mom права выполнять shutdown без пароля**
+
+   ```bash
+   sudo echo "mom ALL=(ALL) NOPASSWD: /sbin/shutdown" > /etc/sudoers.d/mom-shutdown
+   ```
+
+### **Шаг 6: Финальная проверка**
 
 1. **Перезагрузите сервер:** `sudo reboot`.
 2. **После загрузки проверьте:**

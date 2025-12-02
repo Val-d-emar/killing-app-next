@@ -8,10 +8,19 @@ interface AppState {
   checked: boolean;
 }
 
+interface DeadlineState {
+  isScheduled: boolean;
+  time: string; // В формате HH:mm
+}
+
 export default function HomePage() {
   const [apps, setApps] = useState<AppState[]>([]);
   const [isReadOnly, setIsReadOnly] = useState(false);
   const [serverIPs, setServerIPs] = useState<string[]>([]);
+  const [deadline, setDeadline] = useState<DeadlineState>({
+    isScheduled: false,
+    time: "22:00",
+  });
 
   const appListFromEnv = useMemo(() => {
     return (process.env.NEXT_PUBLIC_APP_LIST || "").split(",").filter(Boolean);
@@ -62,6 +71,16 @@ export default function HomePage() {
         }));
         setApps(initialAppsState);
       });
+    fetch("/api/schedule-shutdown")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.isScheduled && data.time) {
+          const date = new Date(data.time);
+          const hours = date.getHours().toString().padStart(2, "0");
+          const minutes = date.getMinutes().toString().padStart(2, "0");
+          setDeadline({ isScheduled: true, time: `${hours}:${minutes}` });
+        }
+      });
   }, [appListFromEnv]);
 
   const handleCheckboxChange = async (appName: string, isChecked: boolean) => {
@@ -87,6 +106,19 @@ export default function HomePage() {
     } catch (error) {
       console.error("Ошибка сети", error);
     }
+  };
+
+  const handleDeadlineChange = async (
+    newEnabledState: boolean,
+    newTime: string,
+  ) => {
+    if (isReadOnly) return;
+    setDeadline({ isScheduled: newEnabledState, time: newTime });
+    await fetch("/api/schedule-shutdown", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ enabled: newEnabledState, time: newTime }),
+    });
   };
 
   return (
@@ -116,6 +148,34 @@ export default function HomePage() {
               </label>
             </li>
           ))}
+          <li className={`${styles.appItem} ${styles.deadlineItem}`}>
+            <input
+              type="checkbox"
+              id="deadline"
+              name="deadline"
+              checked={deadline.isScheduled}
+              onChange={(e) =>
+                handleDeadlineChange(e.target.checked, deadline.time)
+              }
+              className={styles.checkbox}
+              disabled={isReadOnly}
+            />
+            <label
+              htmlFor="deadline"
+              className={`${styles.label} ${isReadOnly ? styles.labelDisabled : ""}`}
+            >
+              Deadline
+            </label>
+            <input
+              type="time"
+              value={deadline.time}
+              onChange={(e) =>
+                handleDeadlineChange(deadline.isScheduled, e.target.value)
+              }
+              className={styles.timeInput}
+              disabled={isReadOnly || !deadline.isScheduled}
+            />
+          </li>
         </ul>
       </div>
     </main>
